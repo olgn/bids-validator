@@ -12,6 +12,8 @@ var bvec   = require('./bvec');
 var session = require('./session');
 var headerFields = require('./headerFields');
 
+const BIDSVERSION = "1.0.2";
+
 var BIDS;
 BIDS = {
 
@@ -51,7 +53,7 @@ BIDS = {
                                 modalities: [],
                                 totalFiles: Object.keys(files).length,
                                 size: 0,
-                                bidsVersion: "1.0.2"
+                                bidsVersion: BIDSVERSION
                             };
                             callback(utils.issues.format([issue], summary, options));
                         }
@@ -159,7 +161,7 @@ BIDS = {
             modalities: [],
             totalFiles: Object.keys(fileList).length,
             size: 0,
-            bidsVersion: "1.0.2"
+            bidsVersion: BIDSVERSION
         };
 
         // var subses_mismatch = false;
