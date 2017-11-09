@@ -50,7 +50,8 @@ BIDS = {
                                 tasks: [],
                                 modalities: [],
                                 totalFiles: Object.keys(files).length,
-                                size: 0
+                                size: 0,
+                                bidsVersion: "1.0.2"
                             };
                             callback(utils.issues.format([issue], summary, options));
                         }
@@ -157,7 +158,8 @@ BIDS = {
             tasks: [],
             modalities: [],
             totalFiles: Object.keys(fileList).length,
-            size: 0
+            size: 0,
+            bidsVersion: "1.0.2"
         };
 
         // var subses_mismatch = false;
