@@ -43,6 +43,7 @@ let Issues = React.createClass({
 		let errorMessage    = <h4>Your dataset is not a valid BIDS dataset.</h4>;
 		let noErrorMessage  = <h4>This is a valid BIDS dataset!</h4>;
 		let neurostarsLink  = <h5>If you have any questions please post on <a href="https://neurostars.org/tags/bids" target="_blank">Neurostars</a></h5>;
+		let sourcecode 	    = <h5>The source code for the validator can be found <a href="https://github.com/INCF/bids-validator/tree/gh-pages" target="_blank">here</a></h5>;
 
 		// determine message
 		let message;
@@ -69,6 +70,7 @@ let Issues = React.createClass({
 				{errors.length > 0 && errors !== 'Invalid' || warnings.length > 0 ? <ErrorLink dirName={dirName} errors={errors} warnings={warnings} /> : null}
 				{specLink}
 				{neurostarsLink}
+				{sourcecode}
 			</div>
 		);
 
