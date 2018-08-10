@@ -85,7 +85,7 @@ class Issues extends React.Component {
 		return (
 			<span className="panel-title file-header">
 				<h4 className="em-header clearfix">
-					<strong className="em-header pull-left">{type}: {index + 1}</strong>
+					<strong className="em-header pull-left">{type} {index + 1}: [Code {issue.code}] {issue.key}</strong>
 				</h4>
 				{issue.reason}
 				{fileCount}
