@@ -55,7 +55,7 @@
 
     // clean before build
     gulp.task('clean', function(cb) {
-          del(['dist'], cb);
+          del(['dist']).then(() => cb());
     });
 
     // server and sync changes
