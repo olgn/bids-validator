@@ -12,7 +12,7 @@
         source = require('vinyl-source-stream'),
         buffer = require('vinyl-buffer'),
         babelify = require('babelify'),
-        uglify = require('gulp-uglify'),
+        terser = require('gulp-terser'),
         del = require('del'),
         notify = require('gulp-notify'),
         browserSync = require('browser-sync'),
@@ -96,7 +96,7 @@
             .pipe(source(p.bundle))
             .pipe(buffer())
             .pipe(sourcemaps.init({loadMaps: true}))
-            .pipe(uglify())
+            .pipe(terser())
             .pipe(sourcemaps.write('./'))
             .pipe(gulp.dest(p.dist));
     });
