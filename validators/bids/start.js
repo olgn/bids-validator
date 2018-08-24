@@ -1,6 +1,6 @@
 var utils = require('../../utils')
 var reset = require('./reset')
-var bidsObj = require('./obj')
+var obj = require('./obj')
 var quickTest = require('./quickTest')
 var fullTest = require('./fullTest')
 var quickTestError = require('./quickTestError')
@@ -16,14 +16,15 @@ var quickTestError = require('./quickTestError')
  * arguments to the callback.
  */
 function start(dir, options, callback) {
-  var self = bidsObj
+  let self = obj.BIDS
+  let summary = obj.summary
   utils.options.parse(options, function(issues, options) {
     if (issues && issues.length > 0) {
       // option parsing issues
       callback({ config: issues })
     } else {
       self.options = options
-      reset(bidsObj)
+      reset(self)
       utils.files.readDir(dir, function(files) {
         quickTest(self, files, function(couldBeBIDS) {
           if (couldBeBIDS) {
@@ -31,14 +32,7 @@ function start(dir, options, callback) {
           } else {
             // Return an error immediately if quickTest fails
             var issue = quickTestError(dir)
-            var summary = {
-              sessions: [],
-              subjects: [],
-              tasks: [],
-              modalities: [],
-              totalFiles: Object.keys(files).length,
-              size: 0,
-            }
+            summary.totalFiles = Object.keys(files).length
             callback(utils.issues.format([issue], summary, options))
           }
         })
