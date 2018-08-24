@@ -487,6 +487,9 @@ describe('BIDS.subIDsesIDmismatchtest', function() {
         assert(code64_seen)
         assert(code65_seen)
       }
-    assert.equal(BIDS.subIDsesIDmismatchtest(files, callback), true)
+    assert.equal(
+      BIDS.subIDsesIDmismatchtest({ issues: [], summary: {} }, files, callback),
+      true,
+    )
   })
 })

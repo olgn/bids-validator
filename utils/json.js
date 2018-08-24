@@ -19,6 +19,7 @@ module.exports = {
       err = exception
     } finally {
       if (err) {
+        // console.log('file:', file, 'contents:', contents)
         this.jshint(file, contents, function(issues) {
           callback(issues, null)
         })

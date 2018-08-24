@@ -16,7 +16,6 @@ module.exports = function(file, contents, callback) {
   // primary flow --------------------------------------------------------------------
 
   var issues = []
-
   utils.json.parse(file, contents, function(pissues, jsObj) {
     issues = pissues
     if (jsObj) {
