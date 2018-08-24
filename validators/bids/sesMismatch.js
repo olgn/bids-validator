@@ -6,7 +6,7 @@ var Issue = require('../../utils').issues.Issue
  */
 function mismatchTest(BIDS, fileList) {
   var self = BIDS
-  var subses_mismatch = false
+  var mismatch = false
 
   // validates if sub/ses-id in filename matches with ses/sub directory file is saved
   async.eachOfLimit(fileList, 200, function(file) {
@@ -14,40 +14,23 @@ function mismatchTest(BIDS, fileList) {
 
     var pathValues = values[0]
     var fileValues = values[1]
-    // console.log(path, '/n' ,values);
 
     if (fileValues.sub !== null || fileValues.ses !== null) {
-      if (fileValues.sub !== pathValues.sub) {
-        // console.log("before call  ",subses_mismatch);
-        subses_mismatch = true
-        self.issues.push(
-          new Issue({
-            code: 64,
-            evidence:
-              'File: ' +
-              file.relativePath +
-              ' is saved in incorrect subject directory as per sub-id in filename.',
-            file: file,
-          }),
-        )
+      const sub_mismatch = fileValues.sub !== pathValues.sub
+      const ses_mismatch = fileValues.ses !== pathValues.ses
+
+      if (sub_mismatch) {
+        mismatch = true
+        self.issues.push(mismatchError('subject', file))
       }
 
-      if (fileValues.ses !== pathValues.ses) {
-        subses_mismatch = true
-        self.issues.push(
-          new Issue({
-            code: 65,
-            evidence:
-              'File: ' +
-              file.relativePath +
-              ' is saved in incorrect session directory as per ses-id in filename.',
-            file: file,
-          }),
-        )
+      if (ses_mismatch) {
+        mismatch = true
+        self.issues.push(mismatchError('session', file))
       }
     }
   })
-  return subses_mismatch
+  return mismatch
 }
 
 /**
@@ -56,36 +39,60 @@ function mismatchTest(BIDS, fileList) {
  * found following keys for both path and file keys.
  * sub-
  * ses-
- *
- *
  */
 function getPathandFileValues(path) {
-  var values = {},
-    match
-  var file_name = {},
-    unmat
+  let values = {}
+  let file_name = {}
 
-  // capture subject
-  match = /^\/sub-([a-zA-Z0-9]+)/.exec(path)
-  values.sub = match && match[1] ? match[1] : null
+  // capture sub
+  values.sub = captureFromPath(path, /^\/sub-([a-zA-Z0-9]+)/)
 
   // capture session
-  match = /^\/sub-[a-zA-Z0-9]+\/ses-([a-zA-Z0-9]+)/.exec(path)
-  values.ses = match && match[1] ? match[1] : null
+  values.ses = captureFromPath(path, /^\/sub-[a-zA-Z0-9]+\/ses-([a-zA-Z0-9]+)/)
 
   //capture session and subject id from filename to find if files are in
   // correct sub/ses directory
-  var filename = path.replace(/^.*[\\/]/, '')
+  const filename = path.replace(/^.*[\\/]/, '')
 
   // capture sub from file name
-  unmat = /^sub-([a-zA-Z0-9]+)/.exec(filename)
-  file_name.sub = unmat && unmat[1] ? unmat[1] : null
+  file_name.sub = captureFromPath(filename, /^sub-([a-zA-Z0-9]+)/)
 
   // capture session from file name
-  unmat = /^sub-[a-zA-Z0-9]+_ses-([a-zA-Z0-9]+)/.exec(filename)
-  file_name.ses = unmat && unmat[1] ? unmat[1] : null
+  file_name.ses = captureFromPath(
+    filename,
+    /^sub-[a-zA-Z0-9]+_ses-([a-zA-Z0-9]+)/,
+  )
 
   return [values, file_name]
+}
+
+/**
+ * CaptureFromPath
+ *
+ * takes a file path and a regex and
+ * returns the matched value or null
+ */
+function captureFromPath(path, regex) {
+  const match = regex.exec(path)
+  return match && match[1] ? match[1] : null
+}
+
+function mismatchError(type, file) {
+  let code, abbrv
+  if (type == 'session') {
+    code = 65
+    abbrv = 'ses'
+  } else {
+    code = 64
+    abbrv = 'sub'
+  }
+  return new Issue({
+    code: code,
+    evidence: `File: ${
+      file.relativePath
+    } is saved in incorrect ${type} directory as per ${abbrv}-id in filename.`,
+    file: file,
+  })
 }
 
 module.exports = mismatchTest
