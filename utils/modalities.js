@@ -15,28 +15,23 @@ module.exports = {
       [['magnitude', 'fieldmap'], 'fieldmap'],
       [['epi'], 'fieldmap'],
     ]
-
-    for (
-      var groupTouple_i = 0;
-      groupTouple_i < modalityGroups.length;
-      groupTouple_i++
-    ) {
-      var groupSet = modalityGroups[groupTouple_i][0]
-      var groupName = modalityGroups[groupTouple_i][1]
-      var match = true
-      for (var i = 0; i < groupSet.length; i++) {
-        if (modalities.indexOf(groupSet[i]) === -1) {
+    modalityGroups.map(group => {
+      const groupSet = group[0]
+      const groupName = group[1]
+      let match = true
+      groupSet.map(group => {
+        const groupNotInModalityList = modalities.indexOf(group) === -1
+        if (groupNotInModalityList) {
           match = false
         }
-      }
+      })
       if (match) {
         modalities.push(groupName)
-        for (var j = 0; j < groupSet.length; j++) {
-          modalities.splice(modalities.indexOf(groupSet[j]), 1)
-        }
+        groupSet.map(group => {
+          modalities.splice(modalities.indexOf(group, 1))
+        })
       }
-    }
-
+    })
     return modalities
   },
 
