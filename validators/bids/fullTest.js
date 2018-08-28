@@ -1,5 +1,4 @@
 var async = require('async')
-var fs = require('fs')
 
 var utils = require('../../utils')
 var TSV = require('../tsv')
@@ -218,33 +217,15 @@ function fullTest(BIDS, fileList, callback) {
 
       // validate bvec
       else if (file.name && file.name.endsWith('.bvec')) {
-        utils.files.readFile(file, function(issue, contents) {
-          if (issue) {
-            self.issues.push(issue)
-            process.nextTick(cb)
-            return
-          }
-          bContentsDict[file.relativePath] = contents
-          bvec(file, contents, function(issues) {
-            self.issues = self.issues.concat(issues)
-            process.nextTick(cb)
-          })
+        bvec.validate(file, bContentsDict, self.issues, () => {
+          process.nextTick(cb)
         })
       }
 
       // validate bval
       else if (file.name && file.name.endsWith('.bval')) {
-        utils.files.readFile(file, function(issue, contents) {
-          if (issue) {
-            self.issues.push(issue)
-            process.nextTick(cb)
-            return
-          }
-          bContentsDict[file.relativePath] = contents
-          bval(file, contents, function(issues) {
-            self.issues = self.issues.concat(issues)
-            process.nextTick(cb)
-          })
+        bval.validate(file, bContentsDict, self.issues, () => {
+          process.nextTick(cb)
         })
       }
 
