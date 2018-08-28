@@ -1,7 +1,7 @@
 var assert = require('chai').assert
 var utils = require('../utils')
 var Test = require('mocha/lib/test')
-var BIDS = require('../validators/bids')
+var BIDS = require('../validators/bids/')
 
 var suiteAnat = describe('utils.type.file.isAnat', function() {
   before(function(done) {

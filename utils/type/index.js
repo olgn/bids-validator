@@ -5,7 +5,6 @@
  * representing whether the given file path is valid within the
  * BIDS specification requirements.
  */
-const anatSuffixes = require('./anatSuffixes')
 const fixedTopLevelNames = require('./topLevelNames')
 const re = require('./typeRegex')
 
