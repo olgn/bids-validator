@@ -12,9 +12,33 @@
     "npmPublish": "cd bids-validator && publish",
     "web-dev": "cd bids-validator-web && yarn dev",
     "web-build": "cd bids-validator-web && yarn build",
-    "web-export": "yarn web-build && cd bids-validator-web && yarn next export"
+    "web-export": "yarn web-build && cd bids-validator-web && yarn next export",
+    "commit": "git cz"
   },
   "jest": {
     "testEnvironment": "node"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^7.5.2",
+    "@commitlint/config-conventional": "^7.5.0",
+    "cz-conventional-changelog": "^2.1.0",
+    "eslint": "^5.2.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-prettier": "^2.6.2",
+    "husky": "^1.0.0-rc.13",
+    "prettier": "^1.14.2",
+    "pretty-quick": "^1.6.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged",
+      "prepare-commit-msg": "echo '\u001b[0;36m The BIDS Validator uses \u001b[0m \u001b[32m commitizen \u001b[0m\u001b[36m to ensure the right commit formatting. \n \u001b[35m *** Please use\u001b[0m \u001b[32m yarn commit\u001b[0m\u001b[35m to generate your commit message. *** \n \u001b[36mVisit https://github.com/bids-standard/bids-validator for developer contribution guidelines.\u001b[0m'",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
