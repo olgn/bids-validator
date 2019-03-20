@@ -1,5 +1,7 @@
 ![](https://circleci.com/gh/bids-standard/bids-validator.svg?style=shield&circle-token=:circle-token)
 ![](https://codecov.io/gh/bids-standard/bids-validator/branch/master/graph/badge.svg)
+[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
 # BIDS-Validator
 
@@ -244,18 +246,18 @@ following command to install it globally: `cd bids-validator && npm install -g`
 A note about OS X, the dependencies for the browser require a npm package called
 node-gyp which needs xcode to be installed in order to be compiled.
 
-1. The browser version of `bids-validator` lives in the repo subdirectory 
-	`/bids-validator-web`. It is a [React.js](https://reactjs.org/) application 
-	that uses the [next.js](https://nextjs.org/) framework.
+1. The browser version of `bids-validator` lives in the repo subdirectory
+   `/bids-validator-web`. It is a [React.js](https://reactjs.org/) application
+   that uses the [next.js](https://nextjs.org/) framework.
 2. To develop `bids-validator` and see how it will act in the browser, simply run
-	`yarn web-develop` in the project root and navigate to `localhost:3000`. 
+   `yarn web-develop` in the project root and navigate to `localhost:3000`.
 3. In development mode, changes to the codebase will trigger rebuilds of the application
-	automatically.
+   automatically.
 4. Changes to the `/bids-validator` in the codebase will also be reflected in the
-	web application.
+   web application.
 5. Tests use the [Jest](https://jestjs.io/index.html) testing library and should be developed in `/bids-validator-web/tests`.
-	We can always use more tests, so please feel free to contribute a test that reduces the chance
-	of any bugs you fix!
+   We can always use more tests, so please feel free to contribute a test that reduces the chance
+   of any bugs you fix!
 6. To ensure that the web application compiles successfully in production, run `yarn web-export`
 
 #### Testing
