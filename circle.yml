@@ -38,7 +38,7 @@ jobs:
       - run: apk --no-cache add rsync git python build-base openssh
       - run:
           name: Install bids-validator and bids-validator-web dependencies
-          command: yarn 
+          command: yarn
       - run:
           name: Build and export web-validator
           command: yarn web-export && rsync -av ./bids-validator-web/out/ ~/web_version
@@ -116,7 +116,7 @@ jobs:
       - run: git status
       - run:
           name: Commit updates
-          command: git add . && git commit --allow-empty --no-verify -m 'Circle CI - Generate validator demo with version $CIRCLE_TAG'
+          command: git add . && git commit --allow-empty --no-verify -m "Circle CI - Generate validator demo with version $CIRCLE_TAG"
       - run: git push origin gh-pages -f
 
 workflows:
