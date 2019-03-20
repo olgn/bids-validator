@@ -63,6 +63,24 @@ jobs:
           command: |
             cd bids-validator && python3 setup.py sdist bdist_wheel
             twine check dist/*
+  semantic_release:
+    docker:
+      - image: node:8.11.3-alpine
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - '44:93:5a:f4:2b:2d:c1:8a:f2:8e:8b:e9:27:5f:93:25'
+      - checkout
+      # Publish via semantic release - this will create a github tag and
+      # publish to npm. Once the github tag is pushed, it will trigger the
+      # remaining releases in the `deployment` job.
+      - run: yarn
+      - run: ./node_modules/.bin/npm-cli-login -u $NPM_USERNAME -p $NPM_PASSWORD -e $NPM_EMAIL
+      # Set the version number
+      - run: cd bids-validator && sed -i -E "s/0.0.0/$CIRCLE_TAG/" package.json
+      - run:
+          name: release
+          command: cd bids-validator && yarn semantic-release || true
   deployment:
     docker:
       - image: node:8.11.3-alpine
@@ -80,12 +98,6 @@ jobs:
             python3 -m pip install --upgrade pip setuptools wheel twine
       - run: git checkout -f $CIRCLE_TAG
       - run: cd bids-validator && python3 setup.py sdist bdist_wheel
-      # Publish to NPM
-      - run: yarn
-      - run: ./node_modules/.bin/npm-cli-login -u $NPM_USERNAME -p $NPM_PASSWORD -e $NPM_EMAIL
-      # Set the version number
-      - run: cd bids-validator && sed -i -E "s/0.0.0/$CIRCLE_TAG/" package.json
-      - run: cd bids-validator && npm publish
       # Publish to PyPI
       - run: cd bids-validator && twine upload dist/*
       # Update gh-pages demo site
@@ -141,6 +153,14 @@ workflows:
           filters:
             tags:
               only: /.*/
+      - semantic_release:
+          requires:
+            - test
+            - githubPagesTest
+            - pypi_precheck
+          filters:
+            branches:
+              only: master
       - deployment:
           requires:
             - test
